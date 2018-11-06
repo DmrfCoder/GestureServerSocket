@@ -7,7 +7,7 @@ from flask_socketio import SocketIO, emit
 from model.gestureModel import GestureModel
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
+
 socketio = SocketIO(app)
 
 gestureModel: GestureModel
@@ -20,24 +20,20 @@ def hello_world():
 
 @socketio.on('i')
 def client_msgI(value_i):
-    print(value_i)
-
     emit("i_callback", "success get I")
     gestureModel.updateI(value_i)
 
 
 @socketio.on('q')
-def client_msgQ(value_i):
-    print(value_i)
+def client_msgQ(value_q):
 
-    gestureModel.updateQ(value_i)
+    gestureModel.updateQ(value_q)
 
 
 @socketio.on('bsRecord')
-def client_msgBs(value_i):
-    print(value_i)
+def client_msgBs(bsRecord):
 
-    gestureModel.updateBsRecord(value_i)
+    gestureModel.updateBsRecord(bsRecord)
 
 
 def runServer(model):

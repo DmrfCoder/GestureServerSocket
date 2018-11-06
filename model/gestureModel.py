@@ -9,13 +9,14 @@ class GestureModel:
 
     curDataCountI = 0
     curDataCountQ = 0
+    curDataCountBs = 0
 
     def __init__(self, ui):
         self.ui = ui
 
         self.I = [0] * 2200
         self.Q = [0] * 2200
-        self.bsRecord = [0] * 4400
+        self.BsRecord = [0] * 4400
 
     def Normalize(self, data):
         m = np.mean(data)
@@ -27,31 +28,46 @@ class GestureModel:
 
         value_i = strNewI.split(",")
 
-        floatI = []
+        temp_i = []
 
         for i in value_i:
-            floatI.append(float(i))
+            temp_i.append(float(i))
 
-        normalI = self.Normalize(floatI)
+        temp_i = self.Normalize(temp_i)
 
-        self.I[self.curDataCountI * 110:(self.curDataCountI + 1) * 110] = normalI
-        self.curDataCountI = self.curDataCountI + 1
-        self.curDataCountI = self.curDataCountI % 20
+
+        if self.curDataCountI == 20:
+            self.I[0:2090] = self.I[110:2200]
+            self.I[2090:2200] = temp_i
+
+        else:
+
+            for i in range(0, 110):
+                self.I[self.curDataCountI * 110 + i] = float(temp_i[i])
+            self.curDataCountI = self.curDataCountI + 1
+
         self.ui.updateI(self.I)
 
     def updateQ(self, strNewQ):
-        value_1 = strNewQ.split(",")
+        value_q = strNewQ.split(",")
 
-        floatQ = []
+        temp_q = []
 
-        for i in value_1:
-            floatQ.append(float(i))
+        for i in value_q:
+            temp_q.append(float(i))
 
-        normalQ = self.Normalize(floatQ)
+        temp_q = self.Normalize(temp_q)
 
-        self.Q[self.curDataCountQ * 110:(self.curDataCountQ + 1) * 110] = normalQ
-        self.curDataCountQ = self.curDataCountQ + 1
-        self.curDataCountQ = self.curDataCountQ % 20
+        if self.curDataCountQ == 20:
+            self.Q[0:2090] = self.Q[110:2200]
+            self.Q[2090:2200] = temp_q
+
+        else:
+
+            for i in range(0, 110):
+                self.Q[self.curDataCountQ * 110 + i] = float(temp_q[i])
+            self.curDataCountQ = self.curDataCountQ + 1
+
         self.ui.updateQ(self.Q)
 
     def updateBsRecord(self, bsdata):
@@ -64,10 +80,9 @@ class GestureModel:
             floatBs.append(float(i))
 
         self.BsRecord = self.Normalize(floatBs)
-        #
-        # self.BsRecord[self.curDataCountBs * 110:(self.curDataCountBs + 1) * 110] = normalBs
+
+        # self.BsRecord[self.curDataCountBs * 4400:(self.curDataCountBs + 1) * 4400] = normalBs
         # self.curDataCountBs = self.curDataCountBs + 1
-        # self.curDataCountBs = self.curDataCountBs % 20
+        # self.curDataCountBs = self.curDataCountBs % 2
+
         self.ui.updateBsRecord(self.BsRecord)
-
-

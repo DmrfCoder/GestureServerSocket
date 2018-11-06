@@ -18,8 +18,8 @@ class Ui:
     plt.style.use("ggplot")
 
     def updateI(self, newI):
-        print("update on ui date" + str(newI[0]))
         self.I = newI
+        #print(self.I)
 
     def updateQ(self, newQ):
         self.Q = newQ
@@ -31,9 +31,9 @@ class Ui:
     plt.rcParams['font.sans-serif'] = ['SimHei']
     fig = plt.figure(figsize=(16, 10))
     # 原始数据
-    ax1 = fig.add_subplot(1, 2, 1)
+    ax1 = fig.add_subplot(2, 1, 1)
     # IQ幅度
-    ax2 = fig.add_subplot(2, 2, 2)
+    ax2 = fig.add_subplot(2, 2, 3)
     # IQ复平面
     ax3 = fig.add_subplot(2, 2, 4)
 
@@ -51,13 +51,17 @@ class Ui:
     line3, = ax2.plot(x, Q, label='Q')
     ax2.legend(loc='upper right')
     ax2.set_ylabel('I/Q')
+    ax2.set_title('After digital down_converter')
+
 
 
     ax3.set_ylim(-1, 1)
     ax3.set_xlim(-1, 1)
     ax3.set_xlabel('I')
     ax3.set_ylabel('Q')
-    line4, = ax3.plot(I, Q,'g')
+    line4, = ax3.plot(I[-550:], Q[-550:],'g')
+    ax3.set_title('2D plane of I/Q')
+
 
 
 
@@ -69,8 +73,8 @@ class Ui:
         self.line1.set_ydata(self.bsRecord)
         self.line2.set_ydata(self.I)
         self.line3.set_ydata(self.Q)
-        self.line4.set_xdata(self.I)
-        self.line4.set_ydata(self.Q)
+        self.line4.set_xdata(self.I[-550:])
+        self.line4.set_ydata(self.Q[-550:])
 
 
         return self.line1, self.line2, self.line3,self.line4
@@ -85,8 +89,8 @@ class Ui:
         self.line1.set_ydata(self.bsRecord)
         self.line2.set_ydata(self.I)
         self.line3.set_ydata(self.Q)
-        self.line4.set_xdata(self.I)
-        self.line4.set_ydata(self.Q)
+        self.line4.set_xdata(self.I[-550:])
+        self.line4.set_ydata(self.Q[-550:])
 
         return self.line1, self.line2, self.line3,self.line4
 
