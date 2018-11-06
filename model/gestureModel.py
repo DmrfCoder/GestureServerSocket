@@ -5,7 +5,8 @@ import random
 class GestureModel:
     I = [0] * 2200
     Q = [0] * 2200
-    bsRecord = []
+    bsRecord = [0] * 4400
+
     curDataCountI = 0
     curDataCountQ = 0
 
@@ -52,3 +53,7 @@ class GestureModel:
         self.curDataCountQ = self.curDataCountQ + 1
         self.curDataCountQ = self.curDataCountQ % 20
         self.ui.updateQ(self.Q)
+
+    def updateBsRecord(self, bsdata):
+        self.bsRecord = bsdata
+        self.ui.updateBsRecord(self.bsRecord)
