@@ -3,17 +3,19 @@
 from matplotlib import pyplot as plt
 from matplotlib import animation
 import numpy as np
-import tkinter
-from tkinter import *
-import tkinter.font as tkFont
 
-import _thread
 
+plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
 
 class Ui:
     I = [0] * 2200
     Q = [0] * 2200
     bsRecord = [0] * 4400
+
+
+
+    # 使用自带的样式进行美化
+    plt.style.use("ggplot")
 
     def updateI(self, newI):
         print("update on ui date" + str(newI[0]))
@@ -25,49 +27,68 @@ class Ui:
     def updateBsRecord(self, newBs):
         self.bsRecord = newBs
 
-    def __init__(self):
-        plt.rcParams['font.sans-serif'] = ['SimHei']
-        self.fig = plt.figure(figsize=(16, 10))
-        # IQ幅度
-        ax1 = self.fig.add_subplot(2, 2, 1)
-        # IQ复平面
-        ax2 = self.fig.add_subplot(2, 2, 2)
-        # 原始数据
-        ax3 = self.fig.add_subplot(2, 2, 3)
 
-        x = np.arange(0, 2200, 1)
+    plt.rcParams['font.sans-serif'] = ['SimHei']
+    fig = plt.figure(figsize=(16, 10))
+    # 原始数据
+    ax1 = fig.add_subplot(1, 2, 1)
+    # IQ幅度
+    ax2 = fig.add_subplot(2, 2, 2)
+    # IQ复平面
+    ax3 = fig.add_subplot(2, 2, 4)
 
-        ax1.set_ylim(-1, 1)
-        self.line1, = ax1.plot(x, self.I, label='I')
-        self.line2, = ax1.plot(x, self.Q, label='Q', color='red', linewidth=1.0, linestyle='--')
-        ax1.legend(loc='upper right')
-        ax1.set_ylabel('I/Q')
-        ax1.set_xlabel('Time(s)')
 
-        ax2.set_ylim(-1, 1)
-        ax2.set_xlim(-1, 1)
-        ax2.set_xlabel('I')
-        ax2.set_ylabel('Q')
+    x = np.arange(0, 2200, 1)
+    x1 = np.arange(0,4400,1)
 
-        self.line2, = ax2.plot(self.I, self.Q)
+    ax1.set_ylim(-1, 1)
+    line1, = ax1.plot(x1,bsRecord,'k')
+    ax1.set_title('Raw Signal')
+    ax1.set_xlabel('Time(s)')
 
-        self.line3 = ax3.plot(self.bsRecord)
-        ax3.set_title('Raw Signal')
+    ax2.set_ylim(-1, 1)
+    line2, = ax2.plot(x, I, label='I')
+    line3, = ax2.plot(x, Q, label='Q')
+    ax2.legend(loc='upper right')
+    ax2.set_ylabel('I/Q')
+
+
+    ax3.set_ylim(-1, 1)
+    ax3.set_xlim(-1, 1)
+    ax3.set_xlabel('I')
+    ax3.set_ylabel('Q')
+    line4, = ax3.plot(I, Q,'g')
+
+
 
     def initAnimation(self):
-        self.line1.set_ydata(self.I)
-        self.line2.set_ydata(self.Q)
-        self.line3.set_ydata(self.bsRecord)
-        return self.line1, self.line2, self.line3
+        # self.bsRecord=np.random.rand(4400)
+        # self.I=np.random.rand(2200)
+        # self.Q=np.random.rand(2200)
+
+        self.line1.set_ydata(self.bsRecord)
+        self.line2.set_ydata(self.I)
+        self.line3.set_ydata(self.Q)
+        self.line4.set_xdata(self.I)
+        self.line4.set_ydata(self.Q)
+
+
+        return self.line1, self.line2, self.line3,self.line4
+
 
     def animate(self, i):
         # 接着，构造自定义动画函数animate，用来更新每一帧上各个x对应的y坐标值，参数表示第i帧
         # plt.cla() 这个函数很有用，先记着它
-        self.line1.set_ydata(self.I)
-        self.line2.set_ydata(self.Q)
-        self.line3.set_ydata(self.bsRecord)
+        # self.bsRecord = np.random.rand(4400)
+        # self.I = np.random.rand(2200)
+        # self.Q = np.random.rand(2200)
+        self.line1.set_ydata(self.bsRecord)
+        self.line2.set_ydata(self.I)
+        self.line3.set_ydata(self.Q)
+        self.line4.set_xdata(self.I)
+        self.line4.set_ydata(self.Q)
 
-        return self.line1, self.line2, self.line3
+        return self.line1, self.line2, self.line3,self.line4
 
     # 接下来，我们调用FuncAnimation函数生成动画。参数说明：
     # fig 进行动画绘制的figure

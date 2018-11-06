@@ -55,5 +55,19 @@ class GestureModel:
         self.ui.updateQ(self.Q)
 
     def updateBsRecord(self, bsdata):
-        self.bsRecord = bsdata
-        self.ui.updateBsRecord(self.bsRecord)
+
+        value_1 = bsdata.split(",")
+
+        floatBs = []
+
+        for i in value_1:
+            floatBs.append(float(i))
+
+        self.BsRecord = self.Normalize(floatBs)
+        #
+        # self.BsRecord[self.curDataCountBs * 110:(self.curDataCountBs + 1) * 110] = normalBs
+        # self.curDataCountBs = self.curDataCountBs + 1
+        # self.curDataCountBs = self.curDataCountBs % 20
+        self.ui.updateBsRecord(self.BsRecord)
+
+
